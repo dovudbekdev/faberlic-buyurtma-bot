@@ -13,6 +13,12 @@ import { ConfigService } from '@nestjs/config';
 import { BotModule } from './bot/bot.module';
 import { HttpLoggerMiddleware } from './common/middlewares';
 import { I18nModule, AcceptLanguageResolver, QueryResolver } from 'nestjs-i18n';
+import { UserModule } from './modules/user/user.module';
+import { UserEntity } from './modules/user/entities/user.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProductModule } from './modules/product/product.module';
+import { Product } from './modules/product/entities/product.entity';
+import { FileModule } from './modules/file/file.module';
 
 const envFilePath = (() => {
   const nodeEnv = process.env.NODE_ENV;
@@ -59,7 +65,29 @@ const envFilePath = (() => {
       },
       inject: [ConfigService],
     }),
+
+    // Type ORM
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService<AllConfigType>) => {
+        return {
+          type: 'postgres',
+          host: configService.get('db.dbHost', { infer: true }),
+          port: configService.get('db.dbPort', { infer: true }),
+          username: configService.get('db.dbUser', { infer: true }),
+          password: configService.get('db.dbPassword', { infer: true }),
+          database: configService.get('db.dbName', { infer: true }),
+          entities: [UserEntity, Product],
+          synchronize: true,
+        };
+      },
+      inject: [ConfigService],
+    }),
+    
     BotModule,
+    UserModule,
+    ProductModule,
+    FileModule,
   ],
 })
 export class AppModule {
