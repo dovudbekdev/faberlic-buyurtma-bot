@@ -1,0 +1,54 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: faberlic-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-faberlic}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-faberlic_secret}
+      POSTGRES_DB: ${DB_NAME:-faberlic_db}
+    volumes:
+      # Ma'lumotlar container o'chsa ham saqlanadi
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-faberlic} -d ${DB_NAME:-faberlic_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: faberlic-bot-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      APP_PORT: 3000
+      API_PREFIX: api
+      APP_API_PREFIX: api
+      APP_BASE_URL: ${APP_BASE_URL:-http://localhost:3000/}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: ${DB_USERNAME:-faberlic}
+      DB_PASSWORD: ${DB_PASSWORD:-faberlic_secret}
+      DB_NAME: ${DB_NAME:-faberlic_db}
+      TG_BOT_TOKEN: ${TG_BOT_TOKEN}
+      TG_ADMIN_IDS: ${TG_ADMIN_IDS:-}
+    volumes:
+      # Yuklangan fayllar (rasmlar) saqlanadi
+      - uploads_data:/app/uploads
+    ports:
+      - "${APP_PORT:-3000}:3000"
+
+# Volume'lar — container o'chib ketsa ham ma'lumotlar qoladi
+volumes:
+  postgres_data:
+    name: faberlic_postgres_data
+  uploads_data:
+    name: faberlic_uploads_data

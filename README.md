@@ -57,6 +57,70 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Docker bilan ishga tushirish
+
+Loyiha Docker va Docker Compose orqali ishlashi uchun sozlangan. **PostgreSQL ma'lumotlari** va **yuklangan fayllar (uploads)** named volume'lar orqali saqlanadi — container o'chirilsa ham ma'lumotlar yo'qolmaydi.
+
+### Talablar
+
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+### Ishga tushirish
+
+1. **Environment fayl yaratish**
+
+   ```bash
+   cp env.docker.example .env
+   ```
+
+2. **`.env` faylida `TG_BOT_TOKEN` va `TG_ADMIN_IDS` ni to'ldiring** (BotFather dan token, admin Telegram ID lar vergul bilan).
+
+3. **Container'larni ishga tushirish**
+
+   ```bash
+   docker compose up -d --build
+   ```
+
+4. **Loglarni ko'rish**
+
+   ```bash
+   docker compose logs -f app
+   ```
+
+### Ma'lumotlarning saqlanishi
+
+| Ma'lumot           | Volume nomi              | Izoh                          |
+|--------------------|--------------------------|-------------------------------|
+| PostgreSQL ma'lumotlar | `faberlic_postgres_data` | Bazadagi barcha jadval va yozuvlar |
+| Yuklangan fayllar (rasmlar) | `faberlic_uploads_data`   | Mahsulot rasmlari va boshqa fayllar |
+
+Container'lar `docker compose down` bilan to'xtatilsa ham volume'lar qoladi. Keyin `docker compose up -d` qilsangiz, ma'lumotlar tiklanadi.
+
+**Volume'larni ham o'chirish** (barcha ma'lumotlar o'chadi):
+
+```bash
+docker compose down -v
+```
+
+### Foydali buyruqlar
+
+```bash
+# To'xtatish
+docker compose down
+
+# Qayta build va ishga tushirish
+docker compose up -d --build
+
+# Faqat app loglari
+docker compose logs -f app
+
+# PostgreSQL ga kirish (psql)
+docker compose exec postgres psql -U faberlic -d faberlic_db
+```
+
+---
+
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
