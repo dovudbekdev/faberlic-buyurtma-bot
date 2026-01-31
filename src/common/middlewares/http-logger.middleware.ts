@@ -7,7 +7,7 @@ export class HttpLoggerMiddleware implements NestMiddleware {
 
   use(req: Request, res: Response, next: NextFunction) {
     const start = Date.now();
-    
+
     res.on('finish', () => {
       const duration = Date.now() - start;
       this.logger.log(

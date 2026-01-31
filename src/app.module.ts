@@ -19,6 +19,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductModule } from './modules/product/product.module';
 import { Product } from './modules/product/entities/product.entity';
 import { FileModule } from './modules/file/file.module';
+import { OrderModule } from './modules/order/order.module';
+import { Order } from './modules/order/entities/order.entity';
+import { OrderItem } from './modules/order/entities/order-item.entity';
 
 const envFilePath = (() => {
   const nodeEnv = process.env.NODE_ENV;
@@ -48,8 +51,7 @@ const envFilePath = (() => {
         const fallbackLanguage =
           configService.get('i18n.fallbackLanguage', { infer: true }) || 'uz';
         const nodeEnv = configService.get('app.nodeEnv', { infer: true });
-        const isDevelopment =
-          nodeEnv === 'development' || nodeEnv === 'local';
+        const isDevelopment = nodeEnv === 'development' || nodeEnv === 'local';
 
         return {
           fallbackLanguage,
@@ -77,16 +79,17 @@ const envFilePath = (() => {
           username: configService.get('db.dbUser', { infer: true }),
           password: configService.get('db.dbPassword', { infer: true }),
           database: configService.get('db.dbName', { infer: true }),
-          entities: [UserEntity, Product],
+          entities: [UserEntity, Product, Order, OrderItem],
           synchronize: true,
         };
       },
       inject: [ConfigService],
     }),
-    
+
     BotModule,
     UserModule,
     ProductModule,
+    OrderModule,
     FileModule,
   ],
 })

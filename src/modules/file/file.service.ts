@@ -27,7 +27,7 @@ const MIME_TO_EXT: Record<string, string> = {
 
 @Injectable()
 export class FileService {
-  constructor(private readonly configService: ConfigService<AllConfigType>) { }
+  constructor(private readonly configService: ConfigService<AllConfigType>) {}
 
   async upload(file: UploadedFilePayload): Promise<{ url: string }> {
     if (!file || !file.buffer) {

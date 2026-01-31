@@ -1,7 +1,6 @@
-import { Markup } from "telegraf";
+import { Keyboard } from 'grammy';
 
-export const phoneKeyboard = Markup.keyboard([
-    [
-        Markup.button.contactRequest('📲 Telefon raqamni yuborish')
-    ]
-]).resize().oneTime();
+export const phoneKeyboard = new Keyboard()
+  .requestContact('📲 Telefon raqamni yuborish')
+  .resized()
+  .oneTime();

@@ -1,17 +1,22 @@
-import { Start, Update } from "nestjs-telegraf";
-import { BotService } from "../bot.service";
-import { Context } from "telegraf";
-import { Logger } from "@nestjs/common";
-import { UserService } from "src/modules/user/user.service";
+import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
+import { Bot } from 'grammy';
+import { BotService } from '../bot.service';
+import type { BotContext } from '../bot.context';
 
-@Update()
+@Injectable()
 export class StartUpdate {
-    private readonly logger = new Logger(StartUpdate.name);
-    constructor(private readonly botService: BotService, private readonly userService: UserService) { }
+  private readonly logger = new Logger(StartUpdate.name);
 
-    @Start()
-    async start(ctx: Context): Promise<void> {
-        await this.botService.onStart(ctx);
-        return undefined; // nestjs-telegraf truthy qaytgan qiymatni reply(String(result)) qiladi – [object Object] oldini olish
-    }
+  constructor(
+    @Inject(forwardRef(() => BotService))
+    private readonly botService: BotService,
+  ) {}
+
+  register(bot: Bot<BotContext>): void {
+    bot.command('start', (ctx) => this.start(ctx));
+  }
+
+  async start(ctx: BotContext): Promise<void> {
+    await this.botService.onStart(ctx);
+  }
 }

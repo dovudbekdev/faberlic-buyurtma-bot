@@ -4,10 +4,13 @@ export class CreateProductDto {
   @ApiProperty({ example: 'Krem', description: 'Mahsulot nomi' })
   name: string;
 
-  @ApiProperty({ example: 150000, description: 'Narx (so\'m)' })
+  @ApiProperty({ example: 150000, description: "Narx (so'm)" })
   price: number;
 
-  @ApiPropertyOptional({ example: 'Terini namlash uchun', description: 'Tavsif' })
+  @ApiPropertyOptional({
+    example: 'Terini namlash uchun',
+    description: 'Tavsif',
+  })
   description?: string;
 
   @ApiProperty({
@@ -16,4 +19,7 @@ export class CreateProductDto {
     description: 'Rasmlar URL lari',
   })
   images: string[];
+
+  @ApiProperty({ example: 10, description: "Ombordagi son" })
+  quantity: number;
 }

@@ -27,20 +27,23 @@ async function runProductSeed(): Promise<void> {
         price: item.price,
         description: item.description,
         images: item.images ?? [],
+        quantity: item.quantity,
       });
     }
 
-    console.log(`Seed muvaffaqiyatli: ${PRODUCT_SEED_DATA.length} ta mahsulot qo'shildi.`);
+    console.log(
+      `Seed muvaffaqiyatli: ${PRODUCT_SEED_DATA.length} ta mahsulot qo'shildi.`,
+    );
   } finally {
+    let closeError: unknown;
     try {
       await app.close();
     } catch (err: unknown) {
-      // ApplicationContext da Telegraf launch() qilinmagan bo'ladi;
-      // app.close() da bot.stop() "Bot is not running!" throw qiladi – e'tiborsiz qoldiramiz.
+      // ApplicationContext da grammY bot launch qilinmagan bo'ladi;
       const message = err instanceof Error ? err.message : String(err);
-      if (message?.includes('Bot is not running')) return;
-      throw err;
+      if (!message?.includes('Bot is not running')) closeError = err;
     }
+    if (closeError) throw closeError;
   }
 }
 

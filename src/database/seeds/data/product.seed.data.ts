@@ -1,5 +1,6 @@
 /**
  * Product seed data – Faberlic mahsulotlari uchun namuna ma'lumotlar.
+ * quantity > 0 bo'lishi kerak – bot ro'yxatda faqat omborda bor mahsulotlarni ko'rsatadi.
  * Rasmlar ixtiyoriy; hozircha bo'sh massiv.
  */
 export interface ProductSeedItem {
@@ -7,6 +8,7 @@ export interface ProductSeedItem {
   price: number;
   description?: string;
   images?: string[];
+  quantity: number;
 }
 
 export const PRODUCT_SEED_DATA: ProductSeedItem[] = [
@@ -16,6 +18,7 @@ export const PRODUCT_SEED_DATA: ProductSeedItem[] = [
     description:
       'Yuz terisini yengil tozalaydi, poralarni ochadi va keyingi parvarish uchun tayyorlaydi.',
     images: [],
+    quantity: 25,
   },
   {
     name: 'Namlovchi krem',
@@ -23,13 +26,15 @@ export const PRODUCT_SEED_DATA: ProductSeedItem[] = [
     description:
       '24 soat davomida terini nam ushlab turadi. O‘simlik ekstraktlari va gialuron kislota.',
     images: [],
+    quantity: 30,
   },
   {
-    name: 'Ko‘z atrofidagi krem',
+    name: "Ko'z atrofidagi krem",
     price: 195_000,
     description:
-      'Ko‘z atrofidagi chandiq va qorong‘u halkalarni kamaytiradi, terini elastik qiladi.',
+      "Ko'z atrofidagi chandiq va qorong'u halkalarni kamaytiradi, terini elastik qiladi.",
     images: [],
+    quantity: 20,
   },
   {
     name: 'Quyoshdan himoya qiluvchi krem SPF 30',
@@ -37,6 +42,7 @@ export const PRODUCT_SEED_DATA: ProductSeedItem[] = [
     description:
       'Kundalik himoya. UV nurlaridan himoya qiladi va terini erta qarishdan saqlaydi.',
     images: [],
+    quantity: 35,
   },
   {
     name: 'Tana yuvish geli',
@@ -44,27 +50,30 @@ export const PRODUCT_SEED_DATA: ProductSeedItem[] = [
     description:
       'Yumshoq teri hissini beradi. Tabiiy ingredientlar, xushbo‘y hid.',
     images: [],
+    quantity: 45,
   },
   {
     name: 'Soch uchun balzam',
     price: 125_000,
     description:
-      'Sochlarni bo‘yash va stylingdan keyin tiklaydi, uchlarini ta’mirlaydi.',
+      "Sochlarni bo'yash va stylingdan keyin tiklaydi, uchlarini ta'mirlaydi.",
     images: [],
+    quantity: 40,
   },
   {
-    name: 'Lab bo‘yogi',
+    name: "Lab bo'yogi",
     price: 75_000,
-    description:
-      'Uzoq muddatli rang, yumshoq lablar. Turli ranglar mavjud.',
+    description: 'Uzoq muddatli rang, yumshoq lablar. Turli ranglar mavjud.',
     images: [],
+    quantity: 55,
   },
   {
-    name: 'Qo‘l kremi',
+    name: "Qo'l kremi",
     price: 85_000,
     description:
-      'Qo‘llarni namlash va himoya qilish. Tez singadi, yog‘siz formulasi.',
+      "Qo'llarni namlash va himoya qilish. Tez singadi, yog'siz formulasi.",
     images: [],
+    quantity: 50,
   },
   {
     name: 'Yuz niqobi – loy',
@@ -72,6 +81,7 @@ export const PRODUCT_SEED_DATA: ProductSeedItem[] = [
     description:
       'Terini chuqur tozalaydi, yog‘ bezlarini tinchlantiradi. Haftada 1–2 marta.',
     images: [],
+    quantity: 28,
   },
   {
     name: 'Parfumeriya suvi (namuna)',
@@ -79,5 +89,6 @@ export const PRODUCT_SEED_DATA: ProductSeedItem[] = [
     description:
       'Faberlic klassik atir suvi. Uzoq davom etadigan xushbo‘y hid.',
     images: [],
+    quantity: 18,
   },
 ];

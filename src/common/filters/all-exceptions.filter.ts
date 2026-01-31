@@ -24,17 +24,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
       exception instanceof HttpException ? exception.stack : '',
     );
 
-
     this.logger.error(
       `${request.method} ${request.url} ${response.statusCode} - ${exception.message}`,
     );
 
     response.status(status).json({
-        success: false,
-        statusCode: status,
-        timestamp: new Date().toISOString(),
-        path: request.url,
-        message,
-    })
+      success: false,
+      statusCode: status,
+      timestamp: new Date().toISOString(),
+      path: request.url,
+      message,
+    });
   }
 }

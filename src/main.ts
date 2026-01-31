@@ -11,13 +11,13 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
-  
+
   try {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
     // ConfigService ni to'g'ri type bilan olish
     const configService = app.get<ConfigService<AllConfigType>>(ConfigService);
-    
+
     // Config ma'lumotlarini type-safe usulda olish
     const port = configService.get('app.port', { infer: true }) ?? 3000;
     const appBaseUrl = configService.get('app.appBaseUrl', { infer: true });
@@ -85,7 +85,6 @@ async function bootstrap() {
       await app.close();
       process.exit(0);
     });
-
   } catch (error) {
     logger.error('❌ Server ishga tushirishda xatolik:', error);
     process.exit(1);

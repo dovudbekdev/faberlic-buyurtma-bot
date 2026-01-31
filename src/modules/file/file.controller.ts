@@ -43,7 +43,10 @@ export class FileController {
     },
   })
   @ApiResponse({ status: 201, description: 'Fayl yuklandi, URL qaytariladi' })
-  @ApiResponse({ status: 400, description: 'Fayl kiritilmagan yoki format xato' })
+  @ApiResponse({
+    status: 400,
+    description: 'Fayl kiritilmagan yoki format xato',
+  })
   upload(@UploadedFile() file: UploadedFilePayload | undefined) {
     if (!file) {
       throw new BadRequestException('File is required');

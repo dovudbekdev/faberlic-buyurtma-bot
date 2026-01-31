@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
@@ -23,6 +23,14 @@ export class ProductService {
     });
   }
 
+  /** Returns only products with quantity > 0 (for bot catalog). */
+  async findAllInStock(): Promise<Product[]> {
+    return this.productRepository.find({
+      where: { quantity: MoreThan(0) },
+      order: { id: 'ASC' },
+    });
+  }
+
   async findOne(id: number): Promise<Product> {
     const product = await this.productRepository.findOne({ where: { id } });
     if (!product) {
@@ -31,7 +39,10 @@ export class ProductService {
     return product;
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto): Promise<Product> {
+  async update(
+    id: number,
+    updateProductDto: UpdateProductDto,
+  ): Promise<Product> {
     const existing = await this.findOne(id);
     const updated = this.productRepository.merge(existing, updateProductDto);
     return this.productRepository.save(updated);

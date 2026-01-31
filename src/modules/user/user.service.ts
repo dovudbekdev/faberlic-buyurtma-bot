@@ -10,7 +10,7 @@ export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-  ) { }
+  ) {}
 
   async findByPhone(phone: string) {
     return this.userRepository.findOne({ where: { phone } });
