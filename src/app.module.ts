@@ -1,5 +1,6 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import * as path from 'path';
 import {
   AllConfigType,
@@ -85,6 +86,8 @@ const envFilePath = (() => {
       },
       inject: [ConfigService],
     }),
+
+    EventEmitterModule.forRoot(),
 
     BotModule,
     UserModule,

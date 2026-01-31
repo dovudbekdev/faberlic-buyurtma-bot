@@ -17,4 +17,5 @@ export const validationConfig = Joi.object({
 
   // Telegram Bot validation
   TG_BOT_TOKEN: Joi.string().required(),
+  TG_ADMIN_IDS: Joi.string().optional().allow(''),
 });

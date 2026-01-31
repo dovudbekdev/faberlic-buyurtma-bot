@@ -5,13 +5,21 @@ import { StartUpdate } from './updates/start.update';
 import { OrderUpdate } from './updates/order.update';
 import { RegisterScene } from './scenes/register.scene';
 import { CartService } from './services/cart.service';
+import { OrderNotificationListener } from './listeners/order-notification.listener';
 import { UserModule } from 'src/modules/user/user.module';
 import { ProductModule } from 'src/modules/product/product.module';
 import { OrderModule } from 'src/modules/order/order.module';
 
 @Module({
   imports: [ConfigModule, UserModule, ProductModule, OrderModule],
-  providers: [BotService, StartUpdate, OrderUpdate, RegisterScene, CartService],
+  providers: [
+    BotService,
+    StartUpdate,
+    OrderUpdate,
+    RegisterScene,
+    CartService,
+    OrderNotificationListener,
+  ],
   exports: [BotService],
 })
 export class BotModule {}

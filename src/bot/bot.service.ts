@@ -9,8 +9,9 @@ import { UserService } from 'src/modules/user/user.service';
 import { ProductService } from 'src/modules/product/product.service';
 import { OrderService } from 'src/modules/order/order.service';
 import { CartService } from './services/cart.service';
-import { mainMenuKeyboard } from './keyboards';
+import { mainMenuKeyboard, adminMainKeyboard } from './keyboards';
 import { registerHandlers } from './handlers/bot.handlers';
+import { registerAdminHandlers } from './handlers/admin.handler';
 import { StartUpdate } from './updates/start.update';
 import { OrderUpdate } from './updates/order.update';
 import { RegisterScene } from './scenes/register.scene';
@@ -58,6 +59,10 @@ export class BotService implements OnModuleInit {
       orderService: this.orderService,
       cartService: this.cartService,
     });
+    const adminIds = tg?.tgAdminIds ?? [];
+    if (adminIds.length > 0) {
+      registerAdminHandlers(this.bot, { orderService: this.orderService, adminIds });
+    }
     this.startUpdate.register(this.bot);
     // OrderUpdate not registered: product/cart/checkout handled by handlers (product, cart, menu)
 
@@ -85,6 +90,10 @@ export class BotService implements OnModuleInit {
     });
   }
 
+  getBot(): Bot<BotContext> | null {
+    return this.bot;
+  }
+
   async onStart(ctx: BotContext): Promise<void> {
     const user = ctx.from;
     if (!user?.id) {
@@ -101,8 +110,17 @@ export class BotService implements OnModuleInit {
     const chatId = ctx.chat?.id;
     if (!chatId) return;
 
-    await ctx.reply(`Salom, ${existingUser.name}!`, {
-      reply_markup: mainMenuKeyboard,
-    });
+    const adminIds = this.configService.get('tg.tgAdminIds', { infer: true }) ?? [];
+    const isAdmin = adminIds.includes(user.id);
+
+    if (isAdmin) {
+      await ctx.reply('Salom, admin! Buyurtmalarni boshqarish uchun tugmalardan foydalaning.', {
+        reply_markup: adminMainKeyboard,
+      });
+    } else {
+      await ctx.reply(`Salom, ${existingUser.name}!`, {
+        reply_markup: mainMenuKeyboard,
+      });
+    }
   }
 }
